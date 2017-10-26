@@ -39,17 +39,19 @@ os.system("dir "+destDir+"*.txt /b > "+folderDir+"txtFiles.txt")
 from time import sleep
 sleep(0.3)
 
- 
+#Reading contents of txtFile
 f= open(folderDir +"txtFiles.txt","r")
 txtFiles= f.read().splitlines()
 f.close()
-
 
 for index in range(0,len(txtFiles)): 
  g= open(destDir+txtFiles[index],"r")
  linesg= g.read().splitlines()
  g.close()
- k= open(averageDir+txtFiles[index]+".avg.txt","w")
+ 
+#Creating .txt files for avg. values for each image
+
+ k= open(averageDir+txtFiles[index]+".avg.txt","w") 
  lineLast= linesg[len(linesg)-1]
  items= lineLast.split(" ")
  headLine= items[0].replace(","," ")
@@ -59,9 +61,25 @@ for index in range(0,len(txtFiles)):
  data= items[1].replace(" ","",1)
  k.write(data+"\n")
 
+#Creating .txt files for glare sources for each image
+
  k.close()
  m= open(glareDir+txtFiles[index]+".glare.txt","w")
  for index2 in range(1,len(linesg)-1):
   m.write(linesg[index2]+"\n")
  m.close()
 print('færdig')
+
+#Creating txt file containing all glare source values 
+p= open(folderDir +"CollectAll.txt",'w')
+p.write(linesg[0]+'\n')
+os.system("dir "+glareDir+"*.txt /b > "+folderDir+"txtFiles2.txt")
+f= open(folderDir +"txtFiles2.txt","r")
+txtFiles2= f.read().splitlines()
+f.close()
+for files in txtFiles2:
+        n=open(glareDir+files,'r')
+        n_content= n.read().splitlines()
+        p.write(n_content[0]+'\n') 
+n.close()
+p.close()
