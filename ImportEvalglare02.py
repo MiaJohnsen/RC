@@ -17,8 +17,6 @@ Created on Thu Oct 26 11:04:00 2017
         - A plot for each image with colored pixels whose luminance values is higher than RC_(PI)
 """
 
-
-
 #Directions to folders containing .pic files / folder containing results / folder containing program
 imageDir = "C:\\users\\mkj\\Desktop\\Relativecontrast\\Pic\\"
 destDir = "C:\\users\\mkj\\Desktop\\Relativecontrast\\Data\\" 
@@ -58,40 +56,66 @@ f= open(folderDir +"txtFiles.txt","r")
 txtFiles= f.read().splitlines()
 f.close()
 
+#Deleting old files
+os.system("del "+averageDir+"*.txt > nul")
+sleep(1.0)
+
+avgdata=[]
+
+#Looping through files in txtFiles 
 for index in range(0,len(txtFiles)):  
  g= open(destDir+txtFiles[index],"r")
  linesg= g.read().splitlines()
  g.close()
  
-#Creating .txt files for avg. values for each image
- k= open(averageDir+txtFiles[index]+".avg.txt","w") 
+#Array with average luminance values
  lineLast= linesg[len(linesg)-1]
- items= lineLast.split(" ")
- headLine= items[0].replace(","," ")
- headLine= headLine.replace(":","")
- k.write(headLine+'\n')
  items= lineLast.split(":") 
  data= items[1].replace(" ","",1)
- k.write(data+"\n")
+ avg=data.split(" ")
+ avgdata.append(avg[1])
+print(avgdata)
+
+m=open(folderDir +"solid_angles_with_posx2.txt","r")
+lines=m.read().splitlines()
+m.close
+
+w=len(lines[0].split(" "))
+h=len(lines)
+
+soildangleswposition=[ [0 for y in range(h)] for x in range(w)]
+
+for y in range(h):
+    items=lines[y].split(" ")
+    for x in range(w):
+        soildangleswposition[x][y]=float(items[x])
+
+print(soildangleswposition[1][1])
+
+#Extracting average luminance of each picture into one file
+#os.system("dir "+destDir+"*.txt /b > "+averageDir+"avgCollect.txt")
+
+
+
 
 #Creating .txt files for glare sources for each image
- k.close()
- m= open(glareDir+txtFiles[index]+".glare.txt","w")
- for index2 in range(1,len(linesg)-1):
-  m.write(linesg[index2]+"\n")
- m.close()
-print('færdig')
-
-#Creating txt file containing all glare source values 
-p= open(folderDir +"CollectAll.txt",'w')
-p.write(linesg[0]+'\n')
-os.system("dir "+glareDir+"*.txt /b > "+folderDir+"txtFiles2.txt")
-f= open(folderDir +"txtFiles2.txt","r")
-txtFiles2= f.read().splitlines()
-f.close()
-for files in txtFiles2:
-        n=open(glareDir+files,'r')
-        n_content= n.read().splitlines()
-        p.write(n_content[0]+'\n') 
-n.close()
-p.close()
+# k.close()
+# m= open(glareDir+txtFiles[index]+".glare.txt","w")
+# for index2 in range(1,len(linesg)-1):
+#  m.write(linesg[index2]+"\n")
+# m.close()
+#print('faerdig')
+#
+##Creating txt file containing all glare source values 
+#p= open(folderDir +"CollectAll.txt",'w')
+#p.write(linesg[0]+'\n')
+#os.system("dir "+glareDir+"*.txt /b > "+folderDir+"txtFiles2.txt")
+#f= open(folderDir +"txtFiles2.txt","r")
+#txtFiles2= f.read().splitlines()
+#f.close()
+#for files in txtFiles2:
+#        n=open(glareDir+files,'r')
+#        n_content= n.read().splitlines()
+#        p.write(n_content[0]+'\n') 
+#n.close()
+#p.close()
